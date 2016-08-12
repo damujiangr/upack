@@ -1,0 +1,19 @@
+{
+  "name": "upack",
+  "version": "1.0.0",
+  "description": "not only a web tool based on gulp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damujiangr/upack.git"
+  },
+  "author": "damujiangr <ramboyan@aliyun.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/damujiangr/upack/issues"
+  },
+  "homepage": "https://github.com/damujiangr/upack#readme"
+}
