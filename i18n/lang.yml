@@ -1,0 +1,263 @@
+ENTER_USERNAME:
+  en_US: "Please enter your username:"
+  zh_CN: "请输入您的用户名:"
+
+ENTER_EMAIL:
+  en_US: "Please enter your email:"
+  zh_CN: "请输入您的邮箱:"
+
+ENTER_TOKEN:
+  en_US: "Please enter your Gitlab token:"
+  zh_CN: "请输入您的Gitlab token:"
+
+INITIALIZE_COMPONENT:
+  en_US: initialize component
+  zh_CN: 初始化组件
+
+INITIALIZING_COMPONENT:
+  en_US: Initializing component...
+  zh_CN: 正在初始化组件...
+
+FINISH_INITIALIZING_COMPONENT:
+  en_US: Finish initializing component
+  zh_CN: 完成初始化组件
+
+CONFIGURING_COMPONENT_JSON:
+  en_US: Configuring "component.json"...
+  zh_CN: 正在配置"component.json"...
+
+FINISH_CONFIGURING_COMPONENT_JSON:
+  en_US: Finish configuring "component.json"
+  zh_CN: 完成配置"component.json"
+
+CREATE_COMPONENT_JSON:
+  en_US: Create "component.json"
+  zh_CN: 自动生成"component.json"
+
+CREATE_PACKAGE_JSON:
+  en_US: Create "package.json"
+  zh_CN: 自动生成"package.json"
+
+COMPONENT_JSON_NOT_FOUND:
+  en_US: component.json not found
+  zh_CN: component.json文件未找到
+
+USER_PROFILE_NOT_FOUND:
+  en_US: User profile not found, initializing "~/.upackrc"
+  zh_CN: 用户配置文件未找到，初始化"~/.upackrc"
+
+FINISH_INITIALIZE_USER_PROFILE:
+  en_US: Finish initializing user profile
+  zh_CN: 完成初始化用户配置文件
+
+LIST_COMPONENT_VERSIONS:
+  en_US: list component versions
+  zh_CN: 列出组件版本
+
+COMPONENT_VERSIONS:
+  en_US: "Component versions\n{0}"
+  zh_CN: "组件版本\n{0}"
+
+INSTALL_COMPONENTS:
+  en_US: install component(s)
+  zh_CN: 安装组件
+
+INSTALLING_COMPONENTS:
+  en_US: Installing component(s)...
+  zh_CN: 正在安装组件...
+
+NO_COMPONENT_TO_INSTALL:
+  en_US: No component to install
+  zh_CN: 没有要安装的组件
+
+INSTALLED_COMPONENTS:
+  en_US: "Installed component(s)\n{0}"
+  zh_CN: "安装的组件\n{0}"
+
+FAIL_TO_INSTALL_COMPONENTS:
+  en_US: Fail to install components {0}
+  zh_CN: 组件 {0} 安装失败
+
+FINISH_INSTALLING_COMPONENT:
+  en_US: Finishing installing component
+  zh_CN: 完成安装组件
+
+INSTALL_COMPONENT_JSON_DEPENDENCIES:
+  en_US: Installing components specified as dependencies in component.json
+  zh_CN: 安装component.json中dependencies项指定的组件
+
+BEGIN_TO_ANALYZE_DEPENDENCIES:
+  en_US: Begin to analyze dependencies
+  zh_CN: 开始分析组件依赖关系
+
+FINISH_ANALYZING_DEPENDENCIES:
+  en_US: Finish analyzing dependencies
+  zh_CN: 完成分析组件依赖关系
+
+ANALYZING_DEPENDENCIES:
+  en_US: Analyzing dependencies...
+  zh_CN: 正在分析组件依赖关系...
+
+COMPONENT_ALREADY_INSTALLED:
+  en_US: Component {0} is already installed
+  zh_CN: 组件 {0} 已经被安装
+
+COMPONENT_VERSION_CONFLICT:
+  en_US: Component version conflict {0}
+  zh_CN: 组件版本冲突 {0}
+
+INSTALLED:
+  en_US: Installed
+  zh_CN: 已经安装
+
+TO_INSTALL:
+  en_US: To install
+  zh_CN: 即将安装
+
+INSTALLED_STATUS:
+  en_US: installed
+  zh_CN: 已经安装
+
+MERGED_STATUS:
+  en_US: "Merged to: {0}"
+  zh_CN: "合并为: {0}"
+
+MERGE_CONFLICT_VERSIONS:
+  en_US: "Merge conflict versions ( {1} ) of component {0} to {2}"
+  zh_CN: "合并组件 {0} 冲突的版本 ( {1} ) 为 {2}"
+
+DEPENDENCIES_TREE:
+  en_US: Dependencies tree
+  zh_CN: 依赖树
+
+READING_EXTRACTED_FILE_ERROR:
+  en_US: Error occurred in reading extracted files
+  zh_CN: 读取压缩文件时出错
+
+CHECKING_UPDATE:
+  en_US: Checking update
+  zh_CN: 检查更新中
+
+NO_UPDATE_AVAILABLE:
+  en_US: No update available
+  zh_CN: 无可用更新
+
+BEGIN_TO_DOWNLOAD_COMPONENTS:
+  en_US: Begin to downloading component(s)
+  zh_CN: 开始下载组件
+
+DOWNLOADING_COMPONENT:
+  en_US: "[:bar] :percent :etas Downloading {0}"
+  zh_CN: "[:bar] :percent :etas 正在下载 {0}"
+
+PRINT_COMPONENT_DEPENDENCIES_TREE:
+  en_US: print component dependencies tree
+  zh_CN: 打印组件依赖树
+
+MANAGE_USER_PROFILE:
+  en_US: manage user profile
+  zh_CN: 管理用户配置
+
+USER_PROFILE:
+  en_US: "User profile\n{0}"
+  zh_CN: "用户配置\n{0}"
+
+VERSIONING_COMPONENT:
+  en_US: versioning component
+  zh_CN: 组件版本更新
+
+CURRENT_VERSION:
+  en_US: "Current version: {0}"
+  zh_CN: "当前版本: {0}"
+
+COMPONENT_OWNERS_CONFLICT:
+  en_US: Component owners conflict
+  zh_CN: 组件作者冲突
+
+UPDATE_COMPONENTS:
+  en_US: update component(s)
+  zh_CN: 更新组件
+
+UNINSTALL_COMPONENTS:
+  en_US: uninstall component(s)
+  zh_CN: 卸载组件
+
+COMPONENT_NOT_INSTALLED:
+  en_US: Component {0} not installed
+  zh_CN: 组件 {0} 未安装
+
+OTHER_COMPONENT_DEPEND:
+  en_US: Can't uninstall {0}, Other component depends on it
+  zh_CN: 无法卸载 {0}，被其他组件依赖
+
+UNABLE_TO_UNINSTALL:
+  en_US: Unable to uninstall components
+  zh_CN: 无法卸载组件
+
+COMPONENT_DIR_NOT_EXISTS:
+  en_US: "Directory of component {0}  does not exists"
+  zh_CN: "组件 {0} 的目录不存在"
+
+NO_COMPONENT_TO_UNINSTALL:
+  en_US: No component to uninstall
+  zh_CN: 没有要卸载的组件
+
+UNINSTALLED_COMPONENTS:
+  en_US: "Uninstalled component(s)\n{0}"
+  zh_CN: "卸载的组件\n{0}"
+
+SHOW_COMPONENT_INFORMATION:
+  en_US: show component information
+  zh_CN: 显示组件的详细信息
+
+COMPONENT_INFORMATION:
+  en_US: "Component information\n{0}"
+  zh_CN: "组件详细信息\n{0}"
+
+SEARCH_COMPONENTS:
+  en_US: search components
+  zh_CN: 搜索组件
+
+SEARCHING_COMPONENTS:
+  en_US: Searching components via Gitlab
+  zh_CN: 正在通过Gitlab搜索组件
+
+NO_MATCHED_RESULTS:
+  en_US: No matched results
+  zh_CN: 未找到匹配的结果
+
+SEARCH_RESULTS:
+  en_US: "Search results\n{0}"
+  zh_CN: "搜索结果\n{0}"
+
+ERROR_INVALID_COMPONENT:
+  en_US: "Invalid component: {0}"
+  zh_CN: "无效的组件: {0}"
+
+LINK_COMPONENT:
+  en_US: link component
+  zh_CN: 链接组件
+
+ERROR_NO_LINK_FOUND:
+  en_US: No link found for {0}
+  zh_CN: 未找到{0}的链接
+
+ERROR_NOT_VALID_COMPONENT_DIRECTORY:
+  en_US: Not a valid component directory
+  zh_CN: 不是有效的组件目录
+
+LINK_REGISTERED:
+  en_US: "Link registered: {0} -> {1}"
+  zh_CN: "注册链接: {0} -> {1}"
+
+ERROR_LINK_TARGET_NOT_EXIST:
+  en_US: Link target does not exist
+  zh_CN: 链接目标不存在
+
+LINKED_COMPONENT:
+  en_US: "Linked component: {0}"
+  zh_CN: "链接的组件: {0}"
+
+LINK_PATH_EXISTS:
+  en_US: Link path already exists
+  zh_CN: 链接路径已经存在
