@@ -1,0 +1,32 @@
+.modA {
+    color: #aaaaaa;
+}
+body {
+    background-color: #FAFAFA;
+}
+.title {
+    width: pxToRem75(500px);
+    margin: pxToRem75(100px) auto pxToRem75(30px);
+    text-align: center;
+    font-size: pxToRem75(30px);
+    font-weight: bolder;
+    padding: pxToRem75(15px);
+    border-radius: pxToRem75(35px);
+}
+.sub-title {
+    width: pxToRem75(500px);
+    margin: pxToRem75(100px) auto pxToRem75(30px);
+    position: relative;
+    font-size: pxToRem75(25px);
+    font-family: "微软雅黑";
+    font-weight: bold;
+    color: #666666;
+    li {
+        height: pxToRem75(35px);
+    }
+}
+
+.page-a{
+  border: pxToRem75(3px) solid #E54724;
+  color: #AF2F2F;
+}

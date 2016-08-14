@@ -1,0 +1,20 @@
+.modB {
+  color: #bbbbbb;
+}
+
+.page-b{
+  border: pxToRem75(3px) solid #6CC146;
+  color: #6CC146;
+}
+
+.icon-github{
+	// width: pxToRem75(32px);
+	// height: pxToRem75(32px);
+	background-image: url(../../slice/icon-facebook.png);
+}
+
+.icon-facebook{
+	// width: pxToRem75(32px);
+	// height: pxToRem75(32px);
+	background-image: url(../../slice/icon-github.png);
+}
