@@ -13,7 +13,7 @@ A integration tool, component management & project generator & project build wor
 ## 配置
 首次执行`upack`命令，会提示输入`用户名`、`邮箱`和`Gitlab Token`。
 
-```sh
+```
 RamboMac:~ rambo$ upack
 20:23:42 INFO  用户配置文件未找到，初始化"~/.upackrc"
 ? 请输入您的用户名: damujiangr
@@ -105,3 +105,25 @@ RamboMac:~ rambo$ upack p -d "domain=https://gitlab.example.com&owner=fe-group"
 + `upack install group/compA@1.8.3`
 
 组件示例可以参考：[https://gitlab.com/u/icefox0801/projects](https://gitlab.com/u/icefox0801/projects)
+
+## 构建流程
+为了更好的适配PC和M项目，构建任务被划分为四份：`build-m-dev.js`、`build-m-dist.js`、`build-pc-dev.js`、`build-pc-dist.js`；在`gulpfile.js`中通过`gulp-hub`引入
+```
+/**
+ * use the external task - m
+ * 默认为m项目
+ * 同时只能引入一种类型的构建脚本，否则会引起任务冲突
+ */
+hub(['task/build-m-*.js']);
+
+/**
+ * use the external task - pc
+ * 同时只能引入一种类型的构建脚本，否则会引起任务冲突
+ */
+// hub(['task/build-pc-*.js']);
+```
+构建命令
++ `gulp dev`: 执行开发模式下的构建任务
++ `gulp dist`: 执行生产模式下的构建任务
+
+具体可以参见[构建工程说明branch-stratery-single](http://gitlab.58corp.com/hrg-fe-zhaopin/branch-strategy-single)[暂时只对内部员工开放]

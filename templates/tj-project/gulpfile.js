@@ -3,6 +3,7 @@ var hub = require('gulp-hub');
 
 /**
  * use the external task - m
+ * 默认为m项目
  * 同时只能引入一种类型的构建脚本，否则会引起任务冲突
  */
 hub(['task/build-m-*.js']);
