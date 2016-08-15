@@ -1,6 +1,6 @@
 {
   "name": "upack",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "not only a web tool based on gulp",
   "bin": "bin/upack.js",
   "main": "lib/upack.js",
