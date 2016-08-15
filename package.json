@@ -1,7 +1,7 @@
 {
   "name": "upack",
   "version": "1.0.7",
-  "description": "not only a web tool based on gulp",
+  "description": "A integration tool, component management & project generator & project build workflow.",
   "bin": "bin/upack.js",
   "main": "lib/upack.js",
   "scripts": {
