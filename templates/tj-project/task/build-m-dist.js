@@ -43,7 +43,10 @@ function delDist() {
 
 //清除 tmp 目录
 function delTmp() {
-    return del([config.tmp.dir]);
+    return del([
+      config.tmp.dir,
+      'src/tmpl/**/*.js'
+    ]);
 }
 
 /**
@@ -123,7 +126,6 @@ function doJsPkg2() {
         }))
         .pipe(gulp.dest(config.tmp.js));
 }
-
 
 /**
  * build js | end
@@ -230,7 +232,7 @@ function transfer() {
 function startServer() {
     browserSync.init({
         server: './dist',
-        startPath: './html/index-a.html',
+        startPath: './html/index-m.html',
     });
 }
 

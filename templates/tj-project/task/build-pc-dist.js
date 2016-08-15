@@ -7,12 +7,13 @@ var path = require('path');
 var gulp = require('gulp');
 var del = require('del');
 var gulpif = require('gulp-if');
-var tap = require('gulp-tap');
 var gutil = require('gulp-util');
+var plumber = require('gulp-plumber');
 //html
 var useref = require('gulp-useref');
 var htmlmin = require('gulp-htmlmin');
 var inlinesource = require('gulp-inline-source');
+var tmpl2js = require('gulp-tmpl2js');
 //js
 var amdOpt = require('amd-optimize');
 var concat = require('gulp-concat');
@@ -21,6 +22,7 @@ var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
+var postcssPxtorem = require('postcss-pxtorem');
 var cssnano = require('gulp-cssnano');
 var tmtsprite = require('gulp-tmtsprite');
 var lazyImageCSS = require('gulp-lazyimagecss');
@@ -41,7 +43,10 @@ function delDist() {
 
 //清除 tmp 目录
 function delTmp() {
-    return del([config.tmp.dir]);
+    return del([
+      config.tmp.dir,
+      'src/tmpl/**/*.js'
+    ]);
 }
 
 /**
@@ -54,7 +59,9 @@ function doUseref() {
         .pipe(useref({
             noAssets: true
         }))
-        .pipe(inlinesource())
+        .pipe(inlinesource({
+            compress: true
+        }))
         .pipe(gulp.dest(config.tmp.dir));
 }
 
@@ -65,6 +72,16 @@ function doMinHtml() {
         }))
         .pipe(gulp.dest(config.tmp.html));
 
+}
+
+//将模板转为js
+function compileTmpl() {
+    return gulp.src(config.src.tmpl)
+        .pipe(tmpl2js({
+            mode: 'format',
+            wrap: 'amd'
+        }))
+        .pipe(gulp.dest('./src/tmpl/'));
 }
 /**
  * build html | end
@@ -86,24 +103,26 @@ function doJsLibs() {
 
 //需要amdOpt(<模块名>) 中的模块名与pkg目录下的名字一致
 //pkg目录下的文件名即打包后的模块名
-function doJsPkg() {
+function doJsPkg1() {
     return gulp.src(config.src.js)
-        .pipe(tap(function(file, t) {
-            var filePath = file.path;
-            var modName = path.basename(filePath, '.js');
-            gulp.src(filePath)
-                .pipe(amdOpt(modName, {
-                    paths: {
-                        'mock': 'node_modules/mockjs/dist/mock',
-                        'mock-api': 'src/mock/api'
-                    },
-                }))
-                .pipe(concat(modName + '.js'))
-                .pipe(uglify({
-                    // preserveComments: 'all',
-                    mangle: false
-                }))
-                .pipe(gulp.dest(config.tmp.js));
+        .pipe(plumber())
+        .pipe(amdOpt('js-pkg-a'))
+        .pipe(concat('js-pkg-a.js'))
+        .pipe(uglify({
+            // preserveComments: 'all',
+            mangle: false
+        }))
+        .pipe(gulp.dest(config.tmp.js));
+}
+
+function doJsPkg2() {
+    return gulp.src(config.src.js)
+        .pipe(plumber())
+        .pipe(amdOpt('js-pkg-b'))
+        .pipe(concat('js-pkg-b.js'))
+        .pipe(uglify({
+            // preserveComments: 'all',
+            mangle: false
         }))
         .pipe(gulp.dest(config.tmp.js));
 }
@@ -145,6 +164,16 @@ var postcssConfig = [
         autoprefixer({
             browsers: ['last 5 versions']
         })
+        // postcssPxtorem({
+        //     root_value: '75',
+        //     prop_white_list: [
+        //         'background-size',
+        //         'background-position',
+        //         'width',
+        //         'height'
+        //     ],
+        //     minPixelValue: 2
+        // })
     ]
     /**
      * 自动添加前缀，需要配置postcssConfig
@@ -184,10 +213,10 @@ function compressSprite() {
  * build other | begin
  */
 
- function copyMock() {
-     return gulp.src(config.src.mock)
-         .pipe(gulp.dest(config.tmp.mock));
- }
+function copyMock() {
+    return gulp.src(config.src.mock)
+        .pipe(gulp.dest(config.tmp.mock));
+}
 
 function transfer() {
     return gulp.src('./tmp/**/*', {
@@ -203,7 +232,7 @@ function transfer() {
 function startServer() {
     browserSync.init({
         server: './dist',
-        startPath: './html/index-a.html',
+        startPath: './html/index-pc.html',
     });
 }
 
@@ -228,7 +257,10 @@ function reversion() {
 //TODO 监听变化
 function startMonitor(callback) {
     var watcher = gulp.watch([
-        'src/**/*'
+        'src/html/**/*.html',
+        'src/js/**/*.js',
+        'src/sass/**/*.scss',
+        'src/tmpl/**/*.html'
     ], {
         ignored: /[\/\\]\./
     });
@@ -236,43 +268,54 @@ function startMonitor(callback) {
     //TODO 事件列表
     watcher.on('change', function(file) {
             gutil.log(file + ' has been changed');
-            rebuild(browserSync.reload);
+            rebuild(reload);
         })
         .on('add', function(file) {
             gutil.log(file + ' has been added');
-            rebuild(browserSync.reload);
+            rebuild(reload);
         })
         .on('unlink', function(file) {
             gutil.log(file + ' is deleted');
-            rebuild(browserSync.reload);
+            rebuild(reload);
         });
 
     callback();
 }
 
+//reload
+function reload() {
+    gutil.log('reloaded!');
+    browserSync.reload();
+}
+
+var rebuildTime = 1000; //毫秒
+var rebuildTimeId;
+
 //优化重新构建的事件，加入changed
 //TODO 暂时先和dist保持同步
 function rebuild(callback) {
-    gulp.series(
-        delTmp,
-        delDist,
-        doUseref,
-        gulp.parallel(
-            copyMock,
-            doJsLibs,
-            doJsPkg,
-            doSassPkg,
-            compressImg
-        ),
-        compressSprite,
-        doCssAutoprefixer,
-        doMinHtml,
-        // doMinJs,//todo 单独提出来
-        doMinCss,
-        reversion,
-        transfer,
-        callback
-    )();
+    clearTimeout(rebuildTimeId);
+    rebuildTimeId = setTimeout(function() {
+        gulp.series(
+            doUseref,
+            compileTmpl,
+            gulp.parallel(
+                copyMock,
+                doJsPkg1,
+                doJsPkg2,
+                doSassPkg,
+                compressImg
+            ),
+            compressSprite,
+            doCssAutoprefixer,
+            doMinHtml,
+            // doMinJs,//todo 单独提出来
+            doMinCss,
+            reversion,
+            transfer,
+            callback
+        )();
+    }, rebuildTime);
 }
 /**
  * build other | end
@@ -285,10 +328,12 @@ gulp.task('dist', gulp.series(
     delTmp,
     delDist,
     doUseref,
+    compileTmpl,
+    copyMock,
     gulp.parallel(
-        copyMock,
         doJsLibs,
-        doJsPkg,
+        doJsPkg1,
+        doJsPkg2,
         doSassPkg,
         compressImg
     ),

@@ -1,0 +1,31 @@
+.modA {
+    color: #aaaaaa;
+}
+body {
+    background-color: #FAFAFA;
+}
+.title {
+    width: 1000px;
+    margin: 100px auto 10px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bolder;
+    padding: 15px;
+    border-radius: 35px;
+}
+.sub-title {
+    width: 1000px;
+    margin: 50px auto 10px;
+    position: relative;
+    font-size: 18px;
+    font-family: "微软雅黑";
+    color: #666666;
+    li {
+        height: 35px;
+    }
+}
+
+.page-a{
+  border: 3px solid #E54724;
+  color: #AF2F2F;
+}

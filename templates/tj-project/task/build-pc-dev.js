@@ -40,7 +40,10 @@ function delDev() {
 
 //清除 tmp 目录
 function delTmp() {
-    return del([config.tmp.dir]);
+    return del([
+      config.tmp.dir,
+      'src/tmpl/**/*.js'
+    ]);
 }
 
 /**
@@ -173,7 +176,7 @@ function transfer() {
 function startServer() {
     browserSync.init({
         server: 'dev',
-        startPath: 'html/index-a.html',
+        startPath: 'html/index-pc.html',
         reloadDelay: 2000
     });
 }
@@ -260,8 +263,3 @@ gulp.task('dev', gulp.series(
     startMonitor,
     startServer
 ));
-
-/**
- * 测试用
- */
-// gulp.task('test', gulp.series(compileTmpl));
