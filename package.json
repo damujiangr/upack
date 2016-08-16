@@ -1,6 +1,6 @@
 {
   "name": "upack",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A integration tool, component management and project generator and project build workflow.",
   "bin": "bin/upack.js",
   "main": "lib/upack.js",
