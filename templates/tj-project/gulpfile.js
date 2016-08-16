@@ -2,14 +2,13 @@ var gulp = require('gulp');
 var hub = require('gulp-hub');
 
 /**
- * use the external task - m
- * 默认为m项目
- * 同时只能引入一种类型的构建脚本，否则会引起任务冲突
+ * 构建的配置文件
  */
-hub(['task/build-m-*.js']);
+var config = {
+    "mode": "m" //项目的模式<m>|<pc>
+};
 
 /**
- * use the external task - pc
- * 同时只能引入一种类型的构建脚本，否则会引起任务冲突
+ * use the external task
  */
-// hub(['task/build-pc-*.js']);
+hub(['task/build-' + config.mode + '-*.js']);
