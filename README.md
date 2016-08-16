@@ -108,19 +108,20 @@ RamboMac:~ rambo$ upack p -d "domain=https://gitlab.example.com&owner=fe-group"
 
 ## 构建流程
 为了更好的适配PC和M项目，构建任务被划分为四份：`build-m-dev.js`、`build-m-dist.js`、`build-pc-dev.js`、`build-pc-dist.js`；在`gulpfile.js`中通过`gulp-hub`引入
+
+gulpfile.js
 ```
 /**
- * use the external task - m
- * 默认为m项目
- * 同时只能引入一种类型的构建脚本，否则会引起任务冲突
+ * 构建的配置文件
  */
-hub(['task/build-m-*.js']);
+var config = {
+    "mode": "m" //项目的模式<m>|<pc>
+};
 
 /**
- * use the external task - pc
- * 同时只能引入一种类型的构建脚本，否则会引起任务冲突
+ * use the external task
  */
-// hub(['task/build-pc-*.js']);
+hub(['task/build-' + config.mode + '-*.js']);
 ```
 构建命令
 + `gulp dev`: 执行开发模式下的构建任务
