@@ -1,12 +1,9 @@
-.DS_Store
-
 # Directory or file for build
 src/tmpl/**/*.js
 tmp
 dist
 dev
 
-### Node template
 # Logs
 logs
 *.log
