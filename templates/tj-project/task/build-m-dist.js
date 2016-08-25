@@ -347,3 +347,27 @@ gulp.task('dist', gulp.series(
     startMonitor,
     startServer
 ));
+
+/**
+ * 用于部署测试环境
+ */
+gulp.task('dist-deploy', gulp.series(
+    delTmp,
+    delDist,
+    doUseref,
+    compileTmpl,
+    gulp.parallel(
+        doJsLibs,
+        doJsPkg1,
+        doJsPkg2,
+        doSassPkg,
+        compressImg
+    ),
+    compressSprite,
+    doCssAutoprefixer,
+    doMinHtml,
+    // doMinJs,//TODO 单独提出来
+    doMinCss,
+    reversion,
+    transfer
+));

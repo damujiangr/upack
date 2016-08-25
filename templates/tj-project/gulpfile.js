@@ -11,4 +11,7 @@ var config = {
 /**
  * use the external task
  */
-hub(['task/build-' + config.mode + '-*.js']);
+hub([
+    'task/build-' + config.mode + '-*.js',
+    'task/ftp.js'
+]);

@@ -6,7 +6,6 @@
 var path = require('path');
 var gulp = require('gulp');
 var del = require('del');
-var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 //html
