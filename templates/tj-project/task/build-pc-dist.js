@@ -174,7 +174,7 @@ var postcssConfig = [
         //     ],
         //     minPixelValue: 2
         // })
-    ]
+    ];
     /**
      * 自动添加前缀，需要配置postcssConfig
      * @return {[type]} [description]
@@ -346,4 +346,30 @@ gulp.task('dist', gulp.series(
     transfer,
     startMonitor,
     startServer
+));
+
+/**
+ * 用于部署的生产环境构建任务
+ */
+gulp.task('dist-build', gulp.series(
+    delTmp,
+    delDist,
+    doUseref,
+    compileTmpl,
+    copyMock,
+    gulp.parallel(
+        doJsLibs,
+        doJsPkg1,
+        doJsPkg2,
+        doSassPkg,
+        compressImg
+    ),
+    compressSprite,
+    doCssAutoprefixer,
+    doMinHtml,
+    // doMinJs,//TODO 单独提出来
+    doMinCss,
+    reversion,
+    'cdn',
+    transfer
 ));

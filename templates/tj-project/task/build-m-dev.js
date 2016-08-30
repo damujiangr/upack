@@ -124,7 +124,7 @@ var postcssConfig = [
         autoprefixer({
             browsers: ['last 5 versions']
         })
-    ]
+    ];
     /**
      * 自动添加前缀，需要配置postcssConfig
      * @return {[type]} [description]
@@ -172,11 +172,14 @@ function transfer() {
 }
 
 //启动服务
+//mock对ajax的拦截和browser-sync/socket.io冲突
 function startServer() {
     browserSync.init({
         server: 'dev',
+        port: 8080,
         startPath: 'html/index-m.html',
-        reloadDelay: 2000
+        reloadDelay: 1000,
+        open: 'local'// local external
     });
 }
 
@@ -260,4 +263,26 @@ gulp.task('dev', gulp.series(
     transfer,
     startMonitor,
     startServer
+));
+
+/**
+ * 用于部署的开发环境构建任务
+ */
+gulp.task('dev-build', gulp.series(
+    delTmp,
+    delDev,
+    doUseref,
+    compileTmpl,
+    copyMock,
+    gulp.parallel(
+        copyImg,
+        copySlice,
+        doJsLibs,
+        doJsPkg1,
+        doJsPkg2,
+        doSassPkg
+    ),
+    doCssAutoprefixer,
+    'cdn',
+    transfer
 ));

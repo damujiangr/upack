@@ -27,13 +27,14 @@
     "dir": "./dist"
   },
   "ftp": {
-    "host": "192.168.119.5",
+    "host": "xxx.xxx.xxx.xx",
     "port": 21,
-    "user": "qatest",
-    "pass": "ftp@fe",
+    "user": "xxxx",
+    "pass": "xxxx",
     "parallel": 10,
-    "remoteStaticPath": "/static.58.com/tj-test/",
-    "remotePic2Path": "/pic2.58.com/tj-test/",
-    "projectName": "branch-strategy-single"
+    "remoteStaticPath": "xxx",
+    "remotePic2Path": "xxxx",
+    "basePath": "Upack",
+    "projectName": "upackProject"
   }
 }

@@ -12,6 +12,7 @@ var config = {
  * use the external task
  */
 hub([
+    'task/cdn.js',
     'task/build-' + config.mode + '-*.js',
     'task/ftp.js'
 ]);

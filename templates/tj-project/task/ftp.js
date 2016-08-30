@@ -14,11 +14,12 @@ var merge = require('merge-stream');
 function remoteFtp() {
     //默认取工程目录名称
     var projectName = config['ftp']['projectName'] || process.cwd().split(path.sep).pop();
-    var remoteStaticPath = config['ftp']['remoteStaticPath'] || "";
-    var remotePic2Path = config['ftp']['remotePic2Path'] || "";
+    var basePath = config['ftp']['basePath'] || 'tj-test';
+    var remoteStaticPath = config['ftp']['remoteStaticPath'] || "static.58.com";
+    var remotePic2Path = config['ftp']['remotePic2Path'] || "pic2.58.com";
     var ftpConfig = _.extend(config['ftp'], {
-        "remoteStaticPath": path.join(remoteStaticPath, projectName),
-        "remotePic2Path": path.join(remotePic2Path, projectName)
+        "remoteStaticPath": path.join(remoteStaticPath, basePath, projectName),
+        "remotePic2Path": path.join(remotePic2Path, basePath, projectName)
     });
 
     var conn = vFtp.create(ftpConfig);
@@ -27,7 +28,8 @@ function remoteFtp() {
     var distStatic = [
         './dist/html/**/*',
         './dist/js/**/*',
-        './dist/css/**/*'
+        './dist/css/**/*',
+        './dist/mock/**/*'
     ];
     var distPic = [
         './dist/img/**/*',
@@ -47,7 +49,15 @@ function remoteFtp() {
 
 //real deploy
 //首先执行 dist 任务
-gulp.task('deploy', gulp.series(
-    'dist-deploy',
+gulp.task('dev-deploy', gulp.series(
+    'dev-build',
+    remoteFtp
+));
+
+/**
+ *
+ */
+gulp.task('dist-deploy', gulp.series(
+    'dist-build',
     remoteFtp
 ));
