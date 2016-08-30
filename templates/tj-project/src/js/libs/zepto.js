@@ -1,12 +1,7 @@
-/* Zepto v1.2.0 - zepto event ajax form detect - zeptojs.com/license */
-(function(global, factory) {
-  if (typeof define === 'function' && define.amd)
-    define(function() { return factory(global) })
-  else
-    factory(global)
-}(this, function(window) {
-  var Zepto = (function() {
-  var undefined, key, $, classList, emptyArray = [], concat = emptyArray.concat, filter = emptyArray.filter, slice = emptyArray.slice,
+/* Zepto v1.1.7 - zepto event data ajax form detect - zeptojs.com/license */
+
+var Zepto = (function() {
+  var undefined, key, $, classList, emptyArray = [], slice = emptyArray.slice, filter = emptyArray.filter,
     document = window.document,
     elementDisplay = {}, classCache = {},
     cssNumber = { 'column-count': 1, 'columns': 1, 'font-weight': 1, 'line-height': 1,'opacity': 1, 'z-index': 1, 'zoom': 1 },
@@ -129,13 +124,6 @@
       $.map(element.childNodes, function(node){ if (node.nodeType == 1) return node })
   }
 
-  function Z(dom, selector) {
-    var i, len = dom ? dom.length : 0
-    for (i = 0; i < len; i++) this[i] = dom[i]
-    this.length = len
-    this.selector = selector || ''
-  }
-
   // `$.zepto.fragment` takes a html string and an optional tag name
   // to generate DOM nodes from the given html string.
   // The generated DOM nodes are returned as an array.
@@ -174,7 +162,10 @@
   // of nodes with `$.fn` and thus supplying all the Zepto functions
   // to the array. This method can be overridden in plugins.
   zepto.Z = function(dom, selector) {
-    return new Z(dom, selector)
+    dom = dom || []
+    dom.__proto__ = $.fn
+    dom.selector = selector || ''
+    return dom
   }
 
   // `$.zepto.isZ` should return `true` if the given object is a Zepto
@@ -269,11 +260,11 @@
         maybeClass = !maybeID && selector[0] == '.',
         nameOnly = maybeID || maybeClass ? selector.slice(1) : selector, // Ensure that a 1 char tag name still gets checked
         isSimple = simpleSelectorRE.test(nameOnly)
-    return (element.getElementById && isSimple && maybeID) ? // Safari DocumentFragment doesn't have getElementById
+    return (isDocument(element) && isSimple && maybeID) ?
       ( (found = element.getElementById(nameOnly)) ? [found] : [] ) :
-      (element.nodeType !== 1 && element.nodeType !== 9 && element.nodeType !== 11) ? [] :
+      (element.nodeType !== 1 && element.nodeType !== 9) ? [] :
       slice.call(
-        isSimple && !maybeID && element.getElementsByClassName ? // DocumentFragment doesn't have getElementsByClassName/TagName
+        isSimple && !maybeID ?
           maybeClass ? element.getElementsByClassName(nameOnly) : // If it's simple, it could be a class
           element.getElementsByTagName(selector) : // Or a tag
           element.querySelectorAll(selector) // Or it's not simple, and we need to query all
@@ -346,13 +337,6 @@
     return true
   }
 
-  $.isNumeric = function(val) {
-    var num = Number(val), type = typeof val
-    return val != null && type != 'boolean' &&
-      (type != 'string' || val.length) &&
-      !isNaN(num) && isFinite(num) || false
-  }
-
   $.inArray = function(elem, array, i){
     return emptyArray.indexOf.call(array, elem, i)
   }
@@ -366,7 +350,6 @@
   $.uuid = 0
   $.support = { }
   $.expr = { }
-  $.noop = function() {}
 
   $.map = function(elements, callback){
     var value, values = [], i, key
@@ -410,25 +393,14 @@
   // Define methods that will be available on all
   // Zepto collections
   $.fn = {
-    constructor: zepto.Z,
-    length: 0,
-
     // Because a collection acts like an array
     // copy over these useful array functions.
     forEach: emptyArray.forEach,
     reduce: emptyArray.reduce,
     push: emptyArray.push,
     sort: emptyArray.sort,
-    splice: emptyArray.splice,
     indexOf: emptyArray.indexOf,
-    concat: function(){
-      var i, value, args = []
-      for (i = 0; i < arguments.length; i++) {
-        value = arguments[i]
-        args[i] = zepto.isZ(value) ? value.toArray() : value
-      }
-      return concat.apply(zepto.isZ(this) ? this.toArray() : this, args)
-    },
+    concat: emptyArray.concat,
 
     // `map` and `slice` in the jQuery API work differently
     // from their array counterparts
@@ -551,7 +523,7 @@
       return filtered(this.map(function(){ return children(this) }), selector)
     },
     contents: function() {
-      return this.map(function() { return this.contentDocument || slice.call(this.childNodes) })
+      return this.map(function() { return slice.call(this.childNodes) })
     },
     siblings: function(selector){
       return filtered(this.map(function(i, el){
@@ -645,7 +617,9 @@
     attr: function(name, value){
       var result
       return (typeof name == 'string' && !(1 in arguments)) ?
-        (0 in this && this[0].nodeType == 1 && (result = this[0].getAttribute(name)) != null ? result : undefined) :
+        (!this.length || this[0].nodeType !== 1 ? undefined :
+          (!(result = this[0].getAttribute(name)) && name in this[0]) ? this[0][name] : result
+        ) :
         this.each(function(idx){
           if (this.nodeType !== 1) return
           if (isObject(name)) for (key in name) setAttribute(this, key, name[key])
@@ -664,10 +638,6 @@
           this[name] = funcArg(this, value, idx, this[name])
         }) :
         (this[0] && this[0][name])
-    },
-    removeProp: function(name){
-      name = propMap[name] || name
-      return this.each(function(){ delete this[name] })
     },
     data: function(name, value){
       var attrName = 'data-' + name.replace(capitalRE, '-$1').toLowerCase()
@@ -928,7 +898,7 @@
     }
   })
 
-  zepto.Z.prototype = Z.prototype = $.fn
+  zepto.Z.prototype = $.fn
 
   // Export internal API functions in the `$.zepto` namespace
   zepto.uniq = uniq
@@ -1214,6 +1184,81 @@ window.$ === undefined && (window.$ = Zepto)
 })(Zepto)
 
 ;(function($){
+  var data = {}, dataAttr = $.fn.data, camelize = $.camelCase,
+    exp = $.expando = 'Zepto' + (+new Date()), emptyArray = []
+
+  // Get value from node:
+  // 1. first try key as given,
+  // 2. then try camelized key,
+  // 3. fall back to reading "data-*" attribute.
+  function getData(node, name) {
+    var id = node[exp], store = id && data[id]
+    if (name === undefined) return store || setData(node)
+    else {
+      if (store) {
+        if (name in store) return store[name]
+        var camelName = camelize(name)
+        if (camelName in store) return store[camelName]
+      }
+      return dataAttr.call($(node), name)
+    }
+  }
+
+  // Store value under camelized key on node
+  function setData(node, name, value) {
+    var id = node[exp] || (node[exp] = ++$.uuid),
+      store = data[id] || (data[id] = attributeData(node))
+    if (name !== undefined) store[camelize(name)] = value
+    return store
+  }
+
+  // Read all "data-*" attributes from a node
+  function attributeData(node) {
+    var store = {}
+    $.each(node.attributes || emptyArray, function(i, attr){
+      if (attr.name.indexOf('data-') == 0)
+        store[camelize(attr.name.replace('data-', ''))] =
+          $.zepto.deserializeValue(attr.value)
+    })
+    return store
+  }
+
+  $.fn.data = function(name, value) {
+    return value === undefined ?
+      // set multiple values via object
+      $.isPlainObject(name) ?
+        this.each(function(i, node){
+          $.each(name, function(key, value){ setData(node, key, value) })
+        }) :
+        // get value from first element
+        (0 in this ? getData(this[0], name) : undefined) :
+      // set value on all elements
+      this.each(function(){ setData(this, name, value) })
+  }
+
+  $.fn.removeData = function(names) {
+    if (typeof names == 'string') names = names.split(/\s+/)
+    return this.each(function(){
+      var id = this[exp], store = id && data[id]
+      if (store) $.each(names || store, function(key){
+        delete store[names ? camelize(this) : key]
+      })
+    })
+  }
+
+  // Generate extended `remove` and `empty` functions
+  ;['remove', 'empty'].forEach(function(methodName){
+    var origFn = $.fn[methodName]
+    $.fn[methodName] = function() {
+      var elements = this.find('*')
+      if (methodName === 'remove') elements = elements.add(this)
+      elements.removeData()
+      return origFn.call(this)
+    }
+  })
+})(Zepto)
+
+;(function($){
   var jsonpID = +new Date(),
       document = window.document,
       key,
@@ -1280,12 +1325,6 @@ window.$ === undefined && (window.$ = Zepto)
     settings.complete.call(context, xhr, status)
     triggerGlobal(settings, context, 'ajaxComplete', [xhr, settings])
     ajaxStop(settings)
-  }
-
-  function ajaxDataFilter(data, type, settings) {
-    if (settings.dataFilter == empty) return data
-    var context = settings.context
-    return settings.dataFilter.call(context, data, type)
   }
 
   // Empty function, used as default callback
@@ -1378,11 +1417,7 @@ window.$ === undefined && (window.$ = Zepto)
     // Whether data should be serialized to string
     processData: true,
     // Whether the browser should be allowed to cache GET responses
-    cache: true,
-    //Used to handle the raw response data of XMLHttpRequest.
-    //This is a pre-filtering function to sanitize the response.
-    //The sanitized response should be returned
-    dataFilter: empty
+    cache: true
   }
 
   function mimeToDataType(mime) {
@@ -1479,8 +1514,6 @@ window.$ === undefined && (window.$ = Zepto)
 
             try {
               // http://perfectionkills.com/global-eval-what-are-the-options/
-              // sanitize response accordingly if data filter callback provided
-              result = ajaxDataFilter(result, dataType, settings)
               if (dataType == 'script')    (1,eval)(result)
               else if (dataType == 'xml')  result = xhr.responseXML
               else if (dataType == 'json') result = blankRE.test(result) ? null : $.parseJSON(result)
@@ -1651,7 +1684,6 @@ window.$ === undefined && (window.$ = Zepto)
       playbook = ua.match(/PlayBook/),
       chrome = ua.match(/Chrome\/([\d.]+)/) || ua.match(/CriOS\/([\d.]+)/),
       firefox = ua.match(/Firefox\/([\d.]+)/),
-      firefoxos = ua.match(/\((?:Mobile|Tablet); rv:([\d.]+)\).*Firefox\/[\d.]+/),
       ie = ua.match(/MSIE\s([\d.]+)/) || ua.match(/Trident\/[\d](?=[^\?]+).*rv:([0-9.].)/),
       webview = !chrome && ua.match(/(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/),
       safari = webview || ua.match(/Version\/([\d.]+)([^S](Safari)|[^M]*(Mobile)[^S]*(Safari))/)
@@ -1680,7 +1712,6 @@ window.$ === undefined && (window.$ = Zepto)
     if (!silk && os.android && ua.match(/Kindle Fire/)) browser.silk = true
     if (chrome) browser.chrome = true, browser.version = chrome[1]
     if (firefox) browser.firefox = true, browser.version = firefox[1]
-    if (firefoxos) os.firefoxos = true, os.version = firefoxos[1]
     if (ie) browser.ie = true, browser.version = ie[1]
     if (safari && (osx || os.ios || win)) {
       browser.safari = true
@@ -1700,5 +1731,3 @@ window.$ === undefined && (window.$ = Zepto)
   $.__detect = detect
 
 })(Zepto)
-  return Zepto
-}))
