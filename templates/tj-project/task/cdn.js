@@ -1,7 +1,6 @@
 var path = require('path');
 var url = require('url');
 var gulp = require('gulp');
-var gutil = require('gulp-util');
 //cdn
 var replace = require('gulp-replace');
 var config = require('./config.json');
@@ -13,15 +12,17 @@ var basePath = config['ftp']['basePath'] || 'tj-test';
  */
 function cdnReplace() {
     var source = path.join(config.tmp.dir, '/**/*');
-    var js = url.resolve('http://j1.cdn.58.com/', path.join(basePath, projectName, 'js/'));
-    var css = url.resolve('http://c.cdn.58.com/', path.join(basePath, projectName, 'css/'));
-    var slice = url.resolve('http://img.cdn.58.com/', path.join(basePath, projectName, 'slice/'));
-    var sprite = url.resolve('http://img.cdn.58.com/', path.join(basePath, projectName, 'sprite/'));
+    var js = url.resolve('http://j1.58cdn.com.cn/', path.join(basePath, projectName, 'js/'));
+    var css = url.resolve('http://c.58cdn.com.cn/', path.join(basePath, projectName, 'css/'));
+    var img = url.resolve('http://img.58cdn.com.cn/', path.join(basePath, projectName, 'img/'));
+    var slice = url.resolve('http://img.58cdn.com.cn/', path.join(basePath, projectName, 'slice/'));
+    var sprite = url.resolve('http://img.58cdn.com.cn/', path.join(basePath, projectName, 'sprite/'));
 
     return gulp.src([source])
         .pipe(replace('../js/', js))
         .pipe(replace('../css/', css))
         .pipe(replace('../../slice/', slice))
+        .pipe(replace('../../img/', img))
         .pipe(replace('../../sprite/', sprite))
         .pipe(gulp.dest(config.tmp.dir));
 }

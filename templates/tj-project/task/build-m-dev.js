@@ -4,6 +4,8 @@
  */
 //util
 var path = require('path');
+var fs = require('fs');
+var _ = require('lodash');
 var gulp = require('gulp');
 var del = require('del');
 var gutil = require('gulp-util');
@@ -29,6 +31,7 @@ var RevAll = require('gulp-rev-all');
 var revDel = require('gulp-rev-delete-original');
 //server reload
 var browserSync = require('browser-sync').create();
+var merge = require('merge-stream');
 //config
 var config = require('./config.json');
 
@@ -84,22 +87,20 @@ function doJsLibs() {
         .pipe(gulp.dest(config.tmp.libs));
 }
 
-//需要amdOpt(<模块名>) 中的模块名与pkg目录下的名字一致
 //pkg目录下的文件名即打包后的模块名
-function doJsPkg1() {
-    return gulp.src(config.src.js)
-        .pipe(plumber())
-        .pipe(amdOpt('js-pkg-a'))
-        .pipe(concat('js-pkg-a.js'))
-        .pipe(gulp.dest(config.tmp.js));
-}
-
-function doJsPkg2() {
-    return gulp.src(config.src.js)
-        .pipe(plumber())
-        .pipe(amdOpt('js-pkg-b'))
-        .pipe(concat('js-pkg-b.js'))
-        .pipe(gulp.dest(config.tmp.js));
+function doJsPkg() {
+    var jsPkgMerge = merge();
+    var files = fs.readdirSync(config.src.jsPkgDir);
+    _.forEach(files, function (value, index) {
+        var mod = _.replace(value, '.js', '');
+        var stream = gulp.src(config.src.js)
+            .pipe(plumber())
+            .pipe(amdOpt(mod))
+            .pipe(concat(value))
+            .pipe(gulp.dest(config.tmp.js));
+        jsPkgMerge.add(stream);
+    });
+    return jsPkgMerge;
 }
 
 /**
@@ -145,10 +146,10 @@ function copyImg() {
         .pipe(gulp.dest(config.tmp.img));
 }
 
-function copySlice() {
-    return gulp.src(config.src.slice)
-        .pipe(gulp.dest(config.tmp.slice));
-}
+// function copySlice() {
+//     return gulp.src(config.src.slice)
+//         .pipe(gulp.dest(config.tmp.slice));
+// }
 /**
  * build img | end
  */
@@ -165,7 +166,7 @@ function transfer() {
     return gulp.src('./tmp/**/*', {
             base: 'tmp'
         })
-        .pipe(gulp.dest('./dev'))
+        .pipe(gulp.dest(config.dev.dir))
         .on('end', function() {
             delTmp();
         });
@@ -228,8 +229,7 @@ function rebuild(callback) {
             doUseref,
             compileTmpl,
             gulp.parallel(
-                doJsPkg1,
-                doJsPkg2,
+                doJsPkg,
                 doSassPkg
             ),
             doCssAutoprefixer,
@@ -253,10 +253,9 @@ gulp.task('dev', gulp.series(
     copyMock,
     gulp.parallel(
         copyImg,
-        copySlice,
+        // copySlice,
         doJsLibs,
-        doJsPkg1,
-        doJsPkg2,
+        doJsPkg,
         doSassPkg
     ),
     doCssAutoprefixer,
@@ -276,10 +275,9 @@ gulp.task('dev-build', gulp.series(
     copyMock,
     gulp.parallel(
         copyImg,
-        copySlice,
+        // copySlice,
         doJsLibs,
-        doJsPkg1,
-        doJsPkg2,
+        doJsPkg,
         doSassPkg
     ),
     doCssAutoprefixer,

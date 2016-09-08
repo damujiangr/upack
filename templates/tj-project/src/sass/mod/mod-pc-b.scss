@@ -7,14 +7,12 @@
   color: #6CC146;
 }
 
+//雪碧图要单独写样式,如下
+//width和height如果不写,则自动添加
 .icon-github{
-	width: 750px;
-	height: 36px;
 	background-image: url(../../slice/icon-facebook.png);
 }
 
 .icon-facebook{
-	width: 34px;
-	height: 34px;
 	background-image: url(../../slice/icon-github.png);
 }

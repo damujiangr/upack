@@ -4,6 +4,8 @@
  */
 //util
 var path = require('path');
+var fs = require('fs');
+var _ = require('lodash');
 var gulp = require('gulp');
 var del = require('del');
 var gulpif = require('gulp-if');
@@ -33,6 +35,7 @@ var RevAll = require('gulp-rev-all');
 var revDel = require('gulp-rev-delete-original');
 //server reload
 var browserSync = require('browser-sync').create();
+var merge = require('merge-stream');
 //config
 var config = require('./config.json');
 
@@ -101,30 +104,20 @@ function doJsLibs() {
         .pipe(gulp.dest(config.tmp.libs));
 }
 
-//需要amdOpt(<模块名>) 中的模块名与pkg目录下的名字一致
 //pkg目录下的文件名即打包后的模块名
-function doJsPkg1() {
-    return gulp.src(config.src.js)
+function doJsPkg() {
+    var jsPkgMerge = merge();
+    var files = fs.readdirSync(config.src.jsPkgDir);
+    _.forEach(files, function (value, index) {
+        var mod = _.replace(value, '.js', '');
+        var stream = gulp.src(config.src.js)
         .pipe(plumber())
-        .pipe(amdOpt('js-pkg-a'))
-        .pipe(concat('js-pkg-a.js'))
-        .pipe(uglify({
-            // preserveComments: 'all',
-            mangle: false
-        }))
+            .pipe(amdOpt(mod))
+            .pipe(concat(value))
         .pipe(gulp.dest(config.tmp.js));
-}
-
-function doJsPkg2() {
-    return gulp.src(config.src.js)
-        .pipe(plumber())
-        .pipe(amdOpt('js-pkg-b'))
-        .pipe(concat('js-pkg-b.js'))
-        .pipe(uglify({
-            // preserveComments: 'all',
-            mangle: false
-        }))
-        .pipe(gulp.dest(config.tmp.js));
+        jsPkgMerge.add(stream);
+    });
+    return jsPkgMerge;
 }
 
 /**
@@ -229,10 +222,13 @@ function transfer() {
 }
 
 //启动服务
+//mock对ajax的拦截和browser-sync/socket.io冲突
 function startServer() {
     browserSync.init({
-        server: './dist',
-        startPath: './html/index-pc.html',
+        server: 'dist',
+        startPath: 'html/index-pc.html',
+        reloadDelay: 1000,
+        open: 'local'// local external
     });
 }
 
@@ -301,8 +297,7 @@ function rebuild(callback) {
             compileTmpl,
             gulp.parallel(
                 copyMock,
-                doJsPkg1,
-                doJsPkg2,
+                doJsPkg,
                 doSassPkg,
                 compressImg
             ),
@@ -332,8 +327,7 @@ gulp.task('dist', gulp.series(
     copyMock,
     gulp.parallel(
         doJsLibs,
-        doJsPkg1,
-        doJsPkg2,
+        doJsPkg,
         doSassPkg,
         compressImg
     ),
@@ -359,8 +353,7 @@ gulp.task('dist-build', gulp.series(
     copyMock,
     gulp.parallel(
         doJsLibs,
-        doJsPkg1,
-        doJsPkg2,
+        doJsPkg,
         doSassPkg,
         compressImg
     ),
