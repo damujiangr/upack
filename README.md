@@ -67,7 +67,7 @@ RamboMac:~ rambo$ upack p -D "domain=https://gitlab.example.com&owner=upack-com"
 `upack`的默认配置项：
 + `name`: 执行`upack`命令所在目录
 + `dir`: `components`，组件目录
-+ `owner`: `fecom-fe`，（后续会更新为`upack-com`）
++ `owner`: `upack-com`
 + `domain`: `http://gitlab.58corp.com`
 
 综上所述：
