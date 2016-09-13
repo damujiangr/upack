@@ -5,7 +5,10 @@
   "bin": "bin/upack.js",
   "main": "lib/upack.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "major": "npm version major && git push --follow-tags",
+    "minor": "npm version minor && git push --follow-tags",
+    "patch": "npm version patch && git push --follow-tags"
   },
   "repository": {
     "type": "git",
