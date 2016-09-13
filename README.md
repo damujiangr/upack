@@ -23,9 +23,9 @@ RamboMac:~ rambo$ upack
 ```
 输入以上信息后，用户信息会被保存到`~/.upackrc`文件中，以后每次执行`upack`都会读取`~/.upackrc`中的用户配置
 
-除此之外，还需要配置`Gitlab`的`API`地址和默认组件所属的用户/组。例如，`Gitlab`的地址为`https://gitlab.example.com`，默认组件的仓库都放下`fe-group`下，那么还需执行：
+除此之外，还需要配置`Gitlab`的`API`地址和默认组件所属的用户/组。例如，`Gitlab`的地址为`https://gitlab.example.com`，默认组件的仓库都放下`upack-com`下，那么还需执行：
 ```
-RamboMac:~ rambo$ upack p -d "domain=https://gitlab.example.com&owner=fe-group"
+RamboMac:~ rambo$ upack p "domain=https://gitlab.example.com&owner=upack-com"
 ```
 
 ## 用法
