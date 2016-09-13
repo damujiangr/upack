@@ -25,7 +25,7 @@ RamboMac:~ rambo$ upack
 
 除此之外，还需要配置`Gitlab`的`API`地址和默认组件所属的用户/组。例如，`Gitlab`的地址为`https://gitlab.example.com`，默认组件的仓库都放下`upack-com`下，那么还需执行：
 ```
-RamboMac:~ rambo$ upack p "domain=https://gitlab.example.com&owner=upack-com"
+RamboMac:~ rambo$ upack p -D "domain=https://gitlab.example.com&owner=upack-com"
 ```
 
 ## 用法
