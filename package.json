@@ -44,7 +44,7 @@
     "lodash": "^4.15.0",
     "log4js": "^0.6.38",
     "moment": "^2.14.1",
-    "nodegit": "^0.13.0",
+    "nodegit": "^0.14.1",
     "os-locale": "^1.4.0",
     "progress": "^1.1.8",
     "semver": "^5.3.0",

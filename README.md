@@ -8,6 +8,14 @@ A integration tool, component management & project generator & project build wor
 ## 安装
 ```
 [sudo] npm install -g upack
+
+或
+
+[推荐]
+[sudo] cnpm install -g nopt
+[sudo] cnpm install -g nodegit
+[sudo] cnpm install -g tar
+[sudo] cnpm install -g upack
 ```
 
 ## 配置
