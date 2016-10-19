@@ -4,15 +4,17 @@ var hub = require('gulp-hub');
 /**
  * 构建的配置文件
  */
-var config = {
-    "mode": "m" //项目的模式<m>|<pc>
-};
+// var config = {
+//     "mode": "m" //项目的模式<m>|<pc>
+// };
 
 /**
  * use the external task
  */
-hub([
-    'task/cdn.js',
-    'task/build-' + config.mode + '-*.js',
-    'task/ftp.js'
-]);
+// hub([
+//     'task/cdn.js',
+//     'task/build-' + config.mode + '-*.js',
+//     'task/ftp.js'
+// ]);
+
+hub(['_task/index.js']);
