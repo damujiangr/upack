@@ -1,0 +1,102 @@
+{
+  "mode": "pc",
+  "server": {
+    "server": "dev",
+    "port": 8080,
+    "startPath": "html/index-pc.html",
+    "reloadDelay": 1000,
+    "open": "local"
+  },
+  "src": {
+    "dir": "./src",
+    "jsPkgDir": "./src/js/pkg",
+    "html": "./src/html/**/*.html",
+    "tmpl": "./src/tmpl/**/*.html",
+    "tmplDir": "./src/tmpl",
+    "img": "./src/img/**/*.{JPG,jpg,png,gif}",
+    "slice": "./src/slice/**/*.png",
+    "sass": "./src/sass/pkg/*.scss",
+    "sassDir": "./src/sass",
+    "js": "./src/js/pkg/*.js",
+    "jsDir": "./src/js",
+    "mock": "./src/mock/**/*.js",
+    "webfonts": "./src/webfonts/**/*"
+  },
+  "tmp": {
+    "dir": "./tmp",
+    "html": "./tmp/html",
+    "tmpl": "./src/tmpl",
+    "img": "./tmp/img",
+    "slice": "./tmp/slice",
+    "sprite": "./tmp/sprite",
+    "css": "./tmp/css/pkg",
+    "js": "./tmp/js/pkg",
+    "libs": "./tmp/js/libs",
+    "mock": "./tmp/mock",
+    "webfonts": "./tmp/webfonts"
+  },
+  "dev": {
+    "dir": "./dev",
+    "html": "./dev/html",
+    "js": "./dev/js",
+    "css": "./dev/css",
+    "img": "./dev/img",
+    "slice": "./dev/slice",
+    "sprite": "./dev/sprite",
+    "webfonts": "./dev/webfonts",
+    "mock": "./dev/mock"
+  },
+  "dist": {
+    "dir": "./dist",
+    "html": "./dist/html",
+    "js": "./dist/js",
+    "css": "./dist/css",
+    "img": "./dist/img",
+    "slice": "./dist/slice",
+    "sprite": "./dist/sprite",
+    "webfonts": "./dist/webfonts",
+    "mock": "./dist/mock"
+  },
+  "ftp": {
+    "host": "192.168.185.104",
+    "port": 21,
+    "user": "qatest",
+    "pass": "ftp@fe",
+    "parallel": 10
+  },
+  "deploy": {
+    "basePath": "tj-test",
+    "projectName": "branch-strategy-single",
+    "sources": [
+      {
+        "remote": "static.58.com",
+        "base": "dist",
+        "dirs": [
+          "css",
+          "html",
+          "js",
+          "mock"
+        ]
+      },
+      {
+        "remote": "pic2.58.com",
+        "base": "dist",
+        "dirs": [
+          "img",
+          "slice",
+          "sprite"
+        ]
+      },
+      {
+        "remote": "pic2.58.com/webfonts",
+        "base": "dist/webfonts",
+        "dirs": [
+          "webfonts"
+        ]
+      }
+    ]
+  },
+  "svn": {
+    "basePath": "/Users/rambo/Documents/work-zhaopin-svn/prod/pc"
+  }
+}
