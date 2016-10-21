@@ -1,11 +1,13 @@
 {
-  "mode": "pc",
   "server": {
-    "server": "dev",
+    "server": {
+      "baseDir": "dev",
+      "directory": true
+    },
+    "startPath": "html",
     "port": 8080,
-    "startPath": "html/index-pc.html",
     "reloadDelay": 1000,
-    "open": "local"
+    "open": "ui"
   },
   "src": {
     "dir": "./src",
