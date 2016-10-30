@@ -60,10 +60,10 @@
     "mock": "./dist/mock"
   },
   "ftp": {
-    "host": "192.168.185.104",
+    "host": "192.168.111.111",
     "port": 21,
-    "user": "qatest",
-    "pass": "ftp@fe",
+    "user": "user",
+    "pass": "pass",
     "parallel": 10
   },
   "deploy": {

@@ -14,8 +14,6 @@ var config = require('./../config.json');
  * @param callback cb可以不传值, 但是必须在此有定义
  */
 function startMonitor(rebuild, callback) {
-    gutil.log(rebuild);
-    gutil.log(callback);
 
     //设定监听的文件
     var watcher = gulp.watch([
@@ -28,22 +26,21 @@ function startMonitor(rebuild, callback) {
         config.src.img,
         config.src.slice
     ], {
+        delay: 1000,
         ignored: /[\/\\]\./
+    }, function (callback) {
+        rebuild();
+        callback();
     });
 
     //TODO 事件列表
     watcher.on('change', function (file) {
-            gutil.log(file + ' has been changed');
-            rebuild();
-        })
-        .on('add', function (file) {
-            gutil.log(file + ' has been added');
-            rebuild();
-        })
-        .on('unlink', function (file) {
-            gutil.log(file + ' is deleted');
-            rebuild();
-        });
+        gutil.log(file + ' has been changed');
+    }).on('add', function (file) {
+        gutil.log(file + ' has been added');
+    }).on('unlink', function (file) {
+        gutil.log(file + ' is unlinked');
+    });
 
     callback();
 }

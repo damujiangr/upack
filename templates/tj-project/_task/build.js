@@ -2,6 +2,7 @@
  * Created by damujiangr on 16/9/17.
  */
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 
 //本地模块
 var ftp = require('./libs/ftp');
@@ -20,31 +21,13 @@ var transformPath = require('./libs/transformPath');
 //本地模块
 var config = require('./config.json');
 
-
-/**
- * html的useref资源处理
- * @returns {*}
- */
-function doUserefAssets() {
-    var filePaths = ['src/js/libs/esl.js', 'src/js/libs/zepto.js'];
-    var conFileName = "esl-zepto.js";
-    return html.compileUserefAssets(filePaths, conFileName);
-}
-
-
-var rebuildTime = 1000; //毫秒
-var rebuildTimeId;
-
-//TODO 需要优化changed
 function rebuild() {
-    clearTimeout(rebuildTimeId);
-    rebuildTimeId = setTimeout(function () {
-        gulp.series(
-            'buildCommon',
-            transfer.transferTmpToTarget.bind(null, config.dev.dir),
-            server.serverReload
-        )();
-    }, rebuildTime);
+    gutil.log('+++++++++rebuild+++++++++');
+    gulp.series(
+        'buildCommon',
+        transfer.transferTmpToTarget.bind(null, config.dev.dir),
+        server.serverReload
+    )();
 }
 
 gulp.task('delAll', gulp.parallel(
@@ -91,7 +74,7 @@ gulp.task('dev', gulp.series(
 /**
  * 用于部署的开发环境构建任务
  */
-gulp.task('dev-absolute', gulp.series(
+gulp.task('dev-abs', gulp.series(
     'delAll',
     'buildCommon',
     transformPath.absoluteAndDomain,
@@ -101,7 +84,7 @@ gulp.task('dev-absolute', gulp.series(
 /**
  * 用于部署的生产环境构建任务
  */
-gulp.task('dist-absolute', gulp.series(
+gulp.task('dist', gulp.series(
     'delAll',
     'buildCommon',
     gulp.parallel(
@@ -118,8 +101,8 @@ gulp.task('dist-absolute', gulp.series(
 
 //real deploy
 //首先执行 dist 任务
-gulp.task('dev-deploy', gulp.series(
-    'dev-absolute',
+gulp.task('dev-dep', gulp.series(
+    'dev-abs',
     ftp.remoteVftp.bind(null, config.dev)
 ));
 
@@ -127,8 +110,8 @@ gulp.task('dev-deploy', gulp.series(
 /**
  * dist部署
  */
-gulp.task('dist-deploy', gulp.series(
-    'dist-absolute',
+gulp.task('dist-dep', gulp.series(
+    'dist',
     ftp.remoteVftp.bind(null, config.dist)
 ));
 
@@ -136,6 +119,6 @@ gulp.task('dist-deploy', gulp.series(
  * SVN复制
  */
 gulp.task('dist-svn', gulp.series(
-    'dist-absolute',
+    'dist',
     transfer.transferDistToSvn
 ));

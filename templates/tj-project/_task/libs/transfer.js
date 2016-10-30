@@ -17,9 +17,7 @@ var ftpPath = require('./../util/ftpPath');
  * @returns {*}
  */
 function transferTmpToTarget(option) {
-    return gulp.src(path.join(config.tmp.dir, '**/*'), {
-            base: config.tmp.dir
-        })
+    return gulp.src(path.join(config.tmp.dir, '**/*'), {base: config.tmp.dir})
         .pipe(gulp.dest(option))
         .on('end', function () {
             cleaner.delTmp();
@@ -38,8 +36,13 @@ function transferDistToSvn() {
     var sources = deployConf.sources;
     for (var i = 0, len = sources.length; i < len; i++) {
         var src = sources[i];
-        var stream = gulp.src(src.static, {base: src.base, buffer: false})
-            .pipe(gulp.dest(path.join(config.svn.basePath, src.remotePath)));
+        var input = src.static;
+        var output = path.join(config.svn.basePath, src.remotePath);
+        var stream = gulp.src(input, {base: src.base, buffer: false})
+            .pipe(gulp.dest(output))
+            .on('end', function (input, output) {
+                gutil.log('同步到上线SVN目录：[' + input + '] ==> 复制到SVN目录：' + output);
+            }.bind(null, input, output));
         mergeStream.add(stream);
     }
     return mergeStream;
