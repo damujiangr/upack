@@ -41,18 +41,6 @@ function compileUseref() {
         });
 
 }
-/**
- *
- * @param filePaths useref引用的资源路径
- * @param conFileName 合成后的文件名称
- * @returns {*}
- */
-function compileUserefAssets(filePaths, conFileName) {
-    return gulp.src(filePaths)
-        .pipe(concat(conFileName))
-        .pipe(uglify())
-        .pipe(gulp.dest(config.tmp.libs));
-}
 
 /**
  * 将模板转为js
@@ -80,6 +68,5 @@ function compressHtml() {
 }
 
 exports.compileUseref = compileUseref;
-exports.compileUserefAssets = compileUserefAssets;
 exports.compileTmpl = compileTmpl;
 exports.compressHtml = compressHtml;

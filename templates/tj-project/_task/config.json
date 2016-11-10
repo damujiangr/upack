@@ -75,9 +75,7 @@
         "base": "dist",
         "dirs": [
           "css",
-          "html",
-          "js",
-          "mock"
+          "js"
         ]
       },
       {
@@ -85,7 +83,6 @@
         "base": "dist",
         "dirs": [
           "img",
-          "slice",
           "sprite"
         ]
       },
@@ -99,6 +96,6 @@
     ]
   },
   "svn": {
-    "basePath": "/Users/rambo/Documents/work-zhaopin-svn/prod/pc"
+    "basePath": "/Users/ramboyan/Documents/gitlab-work/branch-strategy-single/test"
   }
 }

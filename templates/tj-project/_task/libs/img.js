@@ -35,6 +35,16 @@ function compressImg() {
         .pipe(gulp.dest(config.tmp.img));
 }
 
+/**
+ * 字体
+ * @returns {*}
+ */
+function copyFonts(){
+    return gulp.src(config.src.webfonts)
+        .pipe(gulp.dest(config.tmp.webfonts));
+}
+
 exports.copyImg = copyImg;
 exports.copySlice = copySlice;
 exports.compressImg = compressImg;
+exports.copyFonts = copyFonts;
