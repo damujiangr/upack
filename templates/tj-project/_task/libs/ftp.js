@@ -10,6 +10,7 @@
  */
 
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var vFtp = require('vinyl-ftp');
 var merge = require('merge-stream');
 
@@ -33,9 +34,14 @@ function remoteVftp(buildDir) {
     var sources = deployConf.sources;
     for (var i = 0, len = sources.length; i < len; i++) {
         var src = sources[i];
-        var stream = gulp.src(src.static, {base: src.base, buffer: false})
-            .pipe(conn.newer(src.remotePath)) // only upload newer files
-            .pipe(conn.dest(src.remotePath));
+        var input = src.static;
+        var output = src.remotePath;
+        var stream = gulp.src(input, {base: src.base, buffer: false})
+        // .pipe(conn.newer(src.remotePath)) // only upload newer files
+            .pipe(conn.dest(output))
+            .on('end', function (input, output) {
+                gutil.log('上传测试环境：[' + input + '] ==> 上传到IP：' + config.ftp.host + ' 的FTP目录：' + output);
+            }.bind(null, input, output));
         mergeStream.add(stream);
     }
     return mergeStream;
