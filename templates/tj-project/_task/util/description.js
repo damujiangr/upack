@@ -19,13 +19,13 @@ dev.description = '开启本地开发模式';
 var devAbsolute = gulp.task('dev-abs');
 devAbsolute.description = '构建产生用于部署测试环境的文件，引用路径均被修改成绝对路径';
 
-var devDeploy = gulp.task('dev-dep');
+var devDeploy = gulp.task('dev-ftp');
 devDeploy.description = '首先执行 dev-abs 任务，然后将构建产生的文件上传到测试机';
 
 var distAbsolute = gulp.task('dist');
 distAbsolute.description = '构建产生用于部署生产环境的文件，引用路径均被修改成绝对路径';
 
-var distDeploy = gulp.task('dist-dep');
+var distDeploy = gulp.task('dist-ftp');
 distDeploy.description = '首先执行 dist 任务，然后将构建产生的文件上传到测试机';
 
 

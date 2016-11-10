@@ -43,6 +43,7 @@ gulp.task('buildCommon', gulp.series(
     gulp.parallel(
         img.copyImg,
         img.copySlice,
+        img.copyFonts,
         script.compileScript,
         css.compileSass
     ),
@@ -101,7 +102,7 @@ gulp.task('dist', gulp.series(
 
 //real deploy
 //首先执行 dist 任务
-gulp.task('dev-dep', gulp.series(
+gulp.task('dev-ftp', gulp.series(
     'dev-abs',
     ftp.remoteVftp.bind(null, config.dev)
 ));
@@ -110,7 +111,7 @@ gulp.task('dev-dep', gulp.series(
 /**
  * dist部署
  */
-gulp.task('dist-dep', gulp.series(
+gulp.task('dist-ftp', gulp.series(
     'dist',
     ftp.remoteVftp.bind(null, config.dist)
 ));

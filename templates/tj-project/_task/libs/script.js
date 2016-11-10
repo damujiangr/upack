@@ -37,7 +37,10 @@ function compileScript() {
 function compressScript() {
     return gulp.src(path.join(config.tmp.js, '/**/*.js'))
         .pipe(uglify({
-            mangle: false
+            mangle: false,
+            compress:{
+                drop_console: true
+            }
         }))
         .pipe(gulp.dest(config.tmp.js));
 }
