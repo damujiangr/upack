@@ -17,6 +17,7 @@ var server = require('./libs/server');
 var transfer = require('./libs/transfer');
 var reversion = require('./libs/reversion');
 var transformPath = require('./libs/transformPath');
+var zip = require('./libs/zip');
 
 //本地模块
 var config = require('./config.json');
@@ -33,7 +34,8 @@ function rebuild() {
 gulp.task('delAll', gulp.parallel(
     cleaner.delTmp,
     cleaner.delDev,
-    cleaner.delDist
+    cleaner.delDist,
+    cleaner.delBuild
 ));
 
 gulp.task('buildCommon', gulp.series(
@@ -52,24 +54,14 @@ gulp.task('buildCommon', gulp.series(
 );
 
 /**
- * 监听和服务
- * @returns {*}
- */
-gulp.task('monitorAndServer', gulp.series(
-    monitor.startMonitor.bind(null, rebuild),
-    server.startServer
-    )
-);
-// }
-
-/**
  * dev环境下的构建任务
  */
 gulp.task('dev', gulp.series(
     'delAll',
     'buildCommon',
     transfer.transferTmpToTarget.bind(null, config.dev.dir),
-    'monitorAndServer'
+    monitor.startMonitor.bind(null, rebuild),
+    server.startServer.bind(null, config.dev.dir)
 ));
 
 /**
@@ -80,6 +72,15 @@ gulp.task('dev-abs', gulp.series(
     'buildCommon',
     transformPath.absoluteAndDomain,
     transfer.transferTmpToTarget.bind(null, config.dev.dir)
+));
+
+/**
+ * 执行dev-tar，将dev代码部署测试环境之后启动的本地页面服务
+ * 读取的是测试环境的资源，需要配host
+ */
+gulp.task('dev-abs-server', gulp.series(
+    'dev-abs',
+    server.startServer.bind(null, config.dev.dir)
 ));
 
 /**
@@ -99,14 +100,22 @@ gulp.task('dist', gulp.series(
     transfer.transferTmpToTarget.bind(null, config.dist.dir)
 ));
 
+/**
+ * 执行dist-tar，将dist代码部署测试环境后启用的本地页面服务
+ * 读取为测试环境的资源，需要配host
+ */
+gulp.task('dist-server', gulp.series(
+    'dist',
+    server.startServer.bind(null, config.dist.dir)
+));
 
-//real deploy
-//首先执行 dist 任务
+/**
+ * dev 部署
+ */
 gulp.task('dev-ftp', gulp.series(
     'dev-abs',
     ftp.remoteVftp.bind(null, config.dev)
 ));
-
 
 /**
  * dist部署
@@ -117,9 +126,27 @@ gulp.task('dist-ftp', gulp.series(
 ));
 
 /**
- * SVN复制
+ * 同步SVN目录
  */
 gulp.task('dist-svn', gulp.series(
     'dist',
     transfer.transferDistToSvn
+));
+
+/**
+ * 仅用作测试部署，产出目录与线上根目录保持一致
+ */
+gulp.task('dev-tar', gulp.series(
+    'dev-abs',
+    transfer.transferOnlineFormat.bind(null, config.dev),
+    zip.buildTar
+));
+
+/**
+ * 部署时用到的命令，产出目录与线上根目录保持一致，Jenkins集成时同样使用此任务
+ */
+gulp.task('dist-tar', gulp.series(
+    'dist',
+    transfer.transferOnlineFormat.bind(null, config.dist),
+    zip.buildTar
 ));

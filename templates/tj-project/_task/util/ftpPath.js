@@ -27,7 +27,7 @@ function getDeployPath(buildDir) {
     for (var i = 0, len = sources.length; i < len; i++) {
         var src = sources[i];
         //base路径
-        src.base = buildDir.dir;
+        src.base = path.join(buildDir.dir, src.base);
         src.static = [];
         var dirs = src.dirs;
         //dirs路径

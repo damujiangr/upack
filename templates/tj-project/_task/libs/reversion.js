@@ -16,8 +16,8 @@ var config = require('./../config.json');
 function reversion() {
     var revAll = new RevAll({
         fileNameManifest: 'manifest.json',
-        dontRenameFile: ['.html', '.css', '.js'],
-        dontUpdateReference: ['.html', '.css', '.js']
+        dontRenameFile: ['.html', '.js', '.css'],
+        dontUpdateReference: ['.html', '.js', '.css']
     });
 
     return gulp.src([path.join(config.tmp.dir, '**/*')])

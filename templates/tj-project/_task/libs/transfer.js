@@ -41,7 +41,31 @@ function transferDistToSvn() {
         var stream = gulp.src(input, {base: src.base, buffer: false})
             .pipe(gulp.dest(output))
             .on('end', function (input, output) {
-                gutil.log('同步到上线SVN目录：[' + input + '] ==> 复制到SVN目录：' + output);
+                gutil.log('同步文件：[' + input + '] ==> 复制到上线SVN目录：' + output);
+            }.bind(null, input, output));
+        mergeStream.add(stream);
+    }
+    return mergeStream;
+}
+
+/**
+ * 静态资源复制到上线的SVN目录中
+ */
+function transferOnlineFormat(conf) {
+    //获取路径
+    var deployConf = ftpPath.getDeployPath(conf);
+
+    //创建merge工作流
+    var mergeStream = merge();
+    var sources = deployConf.sources;
+    for (var i = 0, len = sources.length; i < len; i++) {
+        var src = sources[i];
+        var input = src.static;
+        var output = path.join(config.build.dir, src.remotePath);
+        var stream = gulp.src(input, {base: src.base, buffer: false})
+            .pipe(gulp.dest(output))
+            .on('end', function (input, output) {
+                gutil.log('同步目录：[' + input + '] ==> 复制到目录：' + output);
             }.bind(null, input, output));
         mergeStream.add(stream);
     }
@@ -50,3 +74,4 @@ function transferDistToSvn() {
 
 exports.transferTmpToTarget = transferTmpToTarget;
 exports.transferDistToSvn = transferDistToSvn;
+exports.transferOnlineFormat = transferOnlineFormat;

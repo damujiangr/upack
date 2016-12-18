@@ -5,6 +5,8 @@ src/tmpl/**/*.js
 tmp
 dist
 dev
+build
+*.tar.gz
 
 ### Node template
 # Logs

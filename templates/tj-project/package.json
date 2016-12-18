@@ -8,6 +8,7 @@
     "major": "upack version major && git push --follow-tags",
     "minor": "upack version minor && git push --follow-tags",
     "patch": "upack version patch && git push --follow-tags"
+    "build": "gulp dist-tar"
   },
   "author": "",
   "license": "MIT",
@@ -19,6 +20,7 @@
     "gulp": "git://github.com/gulpjs/gulp#4.0",
     "gulp-concat": "^2.6.0",
     "gulp-cssnano": "^2.1.2",
+    "gulp-gzip": "^1.4.0",
     "gulp-htmlmin": "^2.0.0",
     "gulp-imagemin": "^3.0.1",
     "gulp-inline-source": "^2.1.0",
@@ -27,6 +29,7 @@
     "gulp-rev-all": "^0.8.24",
     "gulp-rev-delete-original": "^0.2.1",
     "gulp-sass": "^2.3.2",
+    "gulp-tar": "^1.9.0",
     "gulp-tmpl2js": "^0.1.1",
     "gulp-uglify": "^2.0.0",
     "gulp-useref": "^3.1.2",

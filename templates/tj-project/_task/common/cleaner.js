@@ -27,7 +27,12 @@ function delDist() {
     return del([config.dist.dir]);
 }
 
+//清除 build 及 build.tar.gz 目录
+function delBuild(){
+    return del(['build', '*.tar.gz']);
+}
 
 exports.delTmp = delTmp;
 exports.delDev = delDev;
 exports.delDist = delDist;
+exports.delBuild = delBuild;

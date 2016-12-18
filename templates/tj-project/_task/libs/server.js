@@ -11,12 +11,16 @@ var config = require('./../config.json');
 /**
  * 启动服务
  * mock对ajax的拦截和browser-sync/socket.io冲突
+ * @param dir 启动服务的目录
  * @param options
  */
-function startServer(options) {
+function startServer(dir, options) {
+    var serverConf = config.server;
+    serverConf.server.baseDir = dir;
+
     options = options || {};
 
-    options = _.extend(config.server, options);
+    options = _.extend(serverConf, options);
 
     browserSync.init(options);
 }
