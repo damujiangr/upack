@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "major": "upack version major && git push --follow-tags",
     "minor": "upack version minor && git push --follow-tags",
-    "patch": "upack version patch && git push --follow-tags"
+    "patch": "upack version patch && git push --follow-tags",
     "build": "gulp dist-tar"
   },
   "author": "",
