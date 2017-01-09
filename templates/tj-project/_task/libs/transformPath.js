@@ -75,7 +75,7 @@ function transformPath(options) {
                     prefix = domain['css'] || '/';
                 } else if (_.indexOf(['.jpg', '.jpeg', '.png', '.gif'], ext) > -1) {
                     prefix = domain['img'] || '/';
-                } else if (_.indexOf(['eot', 'svg', 'ttf', 'woff'], ext) > -1) {
+                } else if (_.indexOf(['.eot', '.svg', '.ttf', '.woff'], ext) > -1) {
                     prefix = domain['font'] || '/';
                 }
                 return content.replace(filePath, url.resolve(prefix, path.join(remotePath, relative)));
@@ -104,10 +104,10 @@ function absoluteAndDomain() {
             asset: config.tmp.dir,
             remotePath: remotePath,
             domain: {
-                'js': '//j1.58cdn.com.cn',
-                'css': '//c.58cdn.com.cn',
-                'img': '//img.58cdn.com.cn',
-                'font': '//img.58cdn.com.cn/webfonts'
+                'js': '//j1.58cdn.com.cn/',
+                'css': '//c.58cdn.com.cn/',
+                'img': '//img.58cdn.com.cn/',
+                'font': '//img.58cdn.com.cn/webfonts/'
             }
         }))
         .pipe(gulp.dest(config.tmp.dir));
