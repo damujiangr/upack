@@ -17,7 +17,8 @@ var config = require('./../config.json');
 //TODO postcss的配置
 var postcssConfig = [
     autoprefixer({
-        browsers: ['last 5 versions']
+        remove: false,
+        browsers: ['last 5 versions', '>1%']
     })
 ];
 

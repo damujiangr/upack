@@ -7,7 +7,7 @@ var path = require('path');
 var gulp = require('gulp');
 var _ = require('lodash');
 var merge = require('merge-stream');
-var amdOpt = require('amd-optimize');
+var amdOpt = require('./amd/index');
 var concat = require('gulp-concat');
 var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
@@ -23,7 +23,7 @@ function compileScript() {
     var jsPkgMerge = merge();
     var files = fs.readdirSync(config.src.jsPkgDir);
     _.forEach(files, function (value, index) {
-        var mod = _.replace(value, '.js', '');
+        var mod = value.replace('.js', '');
         var stream = gulp.src(config.src.js)
             .pipe(plumber())
             .pipe(amdOpt(mod))

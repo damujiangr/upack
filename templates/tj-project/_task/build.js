@@ -85,61 +85,21 @@ gulp.task('dev-abs-server', gulp.series(
 
 /**
  * 用于部署的生产环境构建任务
+ * 去除版本管理，和绝对路径转化
+ * 先不压缩
  */
 gulp.task('dist', gulp.series(
     'delAll',
     'buildCommon',
     gulp.parallel(
-        html.compressHtml,
+        // html.compressHtml,
         css.compressCss,
         script.compressScript,
         img.compressImg
     ),
-    reversion.reversion,
-    transformPath.absoluteAndDomain,
+    // reversion.reversion,
+    // transformPath.absoluteAndDomain,
     transfer.transferTmpToTarget.bind(null, config.dist.dir)
-));
-
-/**
- * 执行dist-tar，将dist代码部署测试环境后启用的本地页面服务
- * 读取为测试环境的资源，需要配host
- */
-gulp.task('dist-server', gulp.series(
-    'dist',
-    server.startServer.bind(null, config.dist.dir)
-));
-
-/**
- * dev 部署
- */
-gulp.task('dev-ftp', gulp.series(
-    'dev-abs',
-    ftp.remoteVftp.bind(null, config.dev)
-));
-
-/**
- * dist部署
- */
-gulp.task('dist-ftp', gulp.series(
-    'dist',
-    ftp.remoteVftp.bind(null, config.dist)
-));
-
-/**
- * 同步SVN目录
- */
-gulp.task('dist-svn', gulp.series(
-    'dist',
-    transfer.transferDistToSvn
-));
-
-/**
- * 仅用作测试部署，产出目录与线上根目录保持一致
- */
-gulp.task('dev-tar', gulp.series(
-    'dev-abs',
-    transfer.transferOnlineFormat.bind(null, config.dev),
-    zip.buildTar
 ));
 
 /**
@@ -150,3 +110,46 @@ gulp.task('dist-tar', gulp.series(
     transfer.transferOnlineFormat.bind(null, config.dist),
     zip.buildTar
 ));
+
+/**
+ * dist部署
+ */
+gulp.task('dist-ftp', gulp.series(
+    'dist-tar',
+    ftp.remoteVftpBuild
+));
+
+/**
+ * 同步SVN目录
+ */
+gulp.task('dist-svn', gulp.series(
+    'dist-tar',
+    transfer.transferBuildToSvn
+));
+
+/**
+ * 执行dist-tar，将dist代码部署测试环境后启用的本地页面服务
+ * 读取为测试环境的资源，需要配host
+ */
+// gulp.task('dist-server', gulp.series(
+//     'dist',
+//     server.startServer.bind(null, config.dist.dir)
+// ));
+
+/**
+ * dev 部署
+ */
+// gulp.task('dev-ftp', gulp.series(
+//     'dev-abs',
+//     ftp.remoteVftp.bind(null, config.dev)
+// ));
+
+/**
+ * 仅用作测试部署，产出目录与线上根目录保持一致
+ */
+// gulp.task('dev-tar', gulp.series(
+//     'dev-abs',
+//     transfer.transferOnlineFormat.bind(null, config.dev),
+//     zip.buildTar
+// ));
+

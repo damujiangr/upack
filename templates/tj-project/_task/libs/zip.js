@@ -3,8 +3,7 @@
  */
 var path = require('path');
 var gulp = require('gulp');
-var gzip = require('gulp-gzip');
-var tar = require('gulp-tar');
+var zip = require('gulp-vinyl-zip').zip;
 
 var config = require('./../config.json');
 var packageConfig = require('./../../package.json');
@@ -14,8 +13,7 @@ var packageConfig = require('./../../package.json');
  */
 function buildTar() {
     return gulp.src(path.join(config.build.dir, '**/*'))
-        .pipe(tar(packageConfig.name + '.tar'))
-        .pipe(gzip())
+        .pipe(zip(packageConfig.name + '.zip'))
         .pipe(gulp.dest('./'));
 }
 

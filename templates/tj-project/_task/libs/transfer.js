@@ -49,7 +49,7 @@ function transferDistToSvn() {
 }
 
 /**
- * 静态资源复制到上线的SVN目录中
+ * 静态资源按照CDN根目录放置
  */
 function transferOnlineFormat(conf) {
     //获取路径
@@ -72,6 +72,20 @@ function transferOnlineFormat(conf) {
     return mergeStream;
 }
 
+/**
+ * 将build目录整体同步到SVN中
+ */
+function transferBuildToSvn(){
+    var input = path.join(config.build.dir, '**/*');
+    var output = config.svn.basePath;
+    return gulp.src(input, {base: config.build.dir, buffer: false})
+        .pipe(gulp.dest(output))
+        .on('end', function (input, output) {
+            gutil.log('同步文件：[' + input + '] ==> 复制到上线SVN目录：' + output);
+        }.bind(null, input, output));
+}
+
 exports.transferTmpToTarget = transferTmpToTarget;
 exports.transferDistToSvn = transferDistToSvn;
 exports.transferOnlineFormat = transferOnlineFormat;
+exports.transferBuildToSvn = transferBuildToSvn;

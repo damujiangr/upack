@@ -9,6 +9,8 @@
  * Created by damujiangr on 16/9/17.
  */
 
+var path = require('path');
+
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var vFtp = require('vinyl-ftp');
@@ -47,4 +49,20 @@ function remoteVftp(buildDir) {
     return mergeStream;
 }
 
+/**
+ * 将build目录整体上传
+ */
+function remoteVftpBuild(){
+    //创建FTP连接
+    var conn = vFtp.create(config.ftp);
+    var input = path.join(config.build.dir, '**/*');
+    var output ='/';
+    return gulp.src(input, {base: config.build.dir, buffer: false})
+        .pipe(conn.dest(output))
+        .on('end', function (input, output) {
+            gutil.log('上传测试环境：[' + input + '] ==> 上传到IP：' + config.ftp.host + ' 的FTP目录：' + output);
+        }.bind(null, input, output));
+}
+
 exports.remoteVftp = remoteVftp;
+exports.remoteVftpBuild = remoteVftpBuild;
